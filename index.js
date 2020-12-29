@@ -20,6 +20,10 @@ dbConnection();
 // Rutas
 app.use( '/api/usuarios', require('./routes/usuarios'));
 app.use( '/api/login', require('./routes/auth'));
+app.use( '/api/alumnos', require('./routes/alumnos'));
+app.use( '/api/estados_alumnos', require('./routes/estados_alumnos'));
+app.use( '/api/buscar', require('./routes/busquedas'));
+app.use( '/api/upload', require('./routes/uploads'));
 
 
 app.listen(process.env.PORT, () => {
