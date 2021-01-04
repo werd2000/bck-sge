@@ -57,7 +57,8 @@ const crearAlumno = async (req, res = response) => {
 const actualizarAlumno = async (req, res = response ) => {
     // TODO: validar TOKEN y si es usuario permitido
 
-    const id = req.params.id;
+    const id  = req.params.id;
+    const uid = req.uid;
 
     try {
 
@@ -70,10 +71,12 @@ const actualizarAlumno = async (req, res = response ) => {
             });
         }
         
-        const { estado, nroDoc, ...campos} = req.body;
+        const cambioAlumno = {
+            ...req.body,
+            usuario: uid
+        }
 
-        console.log(estado);
-        const estadoAlumnoDB = await EstadoAlumno.findById( estado );
+        const estadoAlumnoDB = await EstadoAlumno.findById( cambioAlumno.estado );
         // Si no encuentra el estadoAlumno muestro error
         if ( !estadoAlumnoDB ) {
             return res.status(404).json({
@@ -85,8 +88,8 @@ const actualizarAlumno = async (req, res = response ) => {
         // Actualizar
 
         // Si el mismo dni es diferente es porque quiere modificar el dni
-        if (alumnoDB.nroDoc !== nroDoc ){
-            const existeDni = await Alumno.findOne({ nroDoc });
+        if (alumnoDB.nroDoc !==cambioAlumno.nroDoc ){
+            const existeDni = await Alumno.findOne({ nroDoc: cambioAlumno.nroDoc });
             if ( existeDni ){
                 return res.status(400).json({
                     ok: false,
@@ -95,9 +98,7 @@ const actualizarAlumno = async (req, res = response ) => {
             }
         }
 
-        campos.nroDoc = nroDoc;
-        campos.estado = estado;
-        const alumnoActualizado = await Alumno.findByIdAndUpdate( id, campos, { new: true });
+        const alumnoActualizado = await Alumno.findByIdAndUpdate( id, cambioAlumno, { new: true });
 
         res.json({
             ok: true,
