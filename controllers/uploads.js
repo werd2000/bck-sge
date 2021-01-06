@@ -45,7 +45,7 @@ const fileUpload = ( req, res = response ) => {
     const nombreArchivo = `${ uuidv4() }.${ extensionArchivo }`;
 
     // Path para guardar el archivo
-    const path = `./uploads/${tipo}/${nombreArchivo}`;
+    const path = `./upload/${tipo}/${nombreArchivo}`;
     // Mover la imagen
     file.mv( path, (err) => {
         if (err){
@@ -72,12 +72,12 @@ const getImagen = (req, res = response) => {
     const tipo = req.params.tipo;
     const archivo = req.params.archivo;
 
-    const pathArchivo = path.join( __dirname, `../uploads/${tipo}/${archivo}`);
+    const pathArchivo = path.join( __dirname, `../upload/${tipo}/${archivo}`);
 
     if ( fs.existsSync(pathArchivo) ) {
         res.sendFile( pathArchivo );
     } else {
-        const pathArchivo = path.join( __dirname, `../uploads/sinfoto.png`);
+        const pathArchivo = path.join( __dirname, `../upload/sinfoto.png`);
         res.sendFile( pathArchivo );
     }
 
